@@ -1,0 +1,2574 @@
+{
+	"info": {
+		"_postman_id": "f7a79f8b-f7cb-4117-b6e2-d1679bc077ba",
+		"name": "Campus Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23483169"
+	},
+	"item": [
+		{
+			"name": "Positions",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"richfield.edu\",\n  \"password\": \"Richfield2020!\",\n  \"rememberMe\": \"true\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Position",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var body=pm.response.json();",
+									"var id=body.id;",
+									"var name=body.name;",
+									"var shortname=body.shortname;",
+									"console.log(id);",
+									"",
+									"",
+									"pm.collectionVariables.set(\"positionID\", id);",
+									"pm.collectionVariables.set(\"positionName\", name)",
+									"pm.collectionVariables.set(\"shortName\", shortname)",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": null,\n  \"name\": \"{{$randomJobTitle}} {{$randomInt}}\",\n  \"shortName\": \"{{$randomInt}}\",\n  \"translateName\": [],\n  \"tenantId\": \"5fe0786230cc4d59295712cf\",\n  \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}employee-position",
+							"host": [
+								"{{CAMPUSSURL}}employee-position"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Position Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{positionID}},\n  \"name\": {{positionName}},\n  \"shortName\": {{shortName}},\n  \"translateName\": [],\n  \"tenantId\": \"5fe0786230cc4d59295712cf\",\n  \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}employee-position",
+							"host": [
+								"{{CAMPUSSURL}}employee-position"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Position",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var body=pm.response.json();",
+									"var editName=body.name;",
+									"var editShortName=body.shortName;",
+									"",
+									"pm.collectionVariables.set(\"editName\",editName);",
+									"pm.collectionVariables.set(\"editShortName\", editShortName);",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{positionID}}\",\n  \"name\": \"Customer Integration Director {{$randomInt}}\",\n  \"shortName\": \"CID {{$randomInt}}\",\n  \"translateName\": [],\n  \"tenantId\": \"5fe0786230cc4d59295712cf\",\n  \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}employee-position",
+							"host": [
+								"{{CAMPUSSURL}}employee-position"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Position",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/employee-position/{{positionID}}",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"employee-position",
+								"{{positionID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Position Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/employee-position/{{positionID}}",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"employee-position",
+								"{{positionID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Position Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{positionID}},\n  \"name\": {{editName}},\n  \"shortName\": {{editShortName}},\n  \"translateName\": [],\n  \"tenantId\": \"5fe0786230cc4d59295712cf\",\n  \"active\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/employee-position",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"employee-position"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Positions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}employee-position/search",
+							"host": [
+								"{{CAMPUSSURL}}employee-position"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Document",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"richfield.edu\",\r\n  \"password\": \"Richfield2020!\",\r\n  \"rememberMe\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"var body=pm.response.json();\r",
+									"var id=body.id;\r",
+									"var name=body.name;\r",
+									"\r",
+									"pm.collectionVariables.set(\"documentID\", id);\r",
+									"pm.collectionVariables.set(\"documentName\", name);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]<- {{$randomInt}}\",\r\n  \"description\": \"MK-TR-ESK-26\",\r\n  \"attachmentStages\": [\r\n    \"STUDENT_REGISTRATION\", \"EXAMINATION\", \"EMPLOYMENT\", \"CERTIFICATE\", \"CONTRACT\", \"DISMISSAL\"\r\n  ],\r\n  \"active\": {{$randomBoolean}},\r\n  \"required\": {{$randomBoolean}},\r\n  \"useCamera\": {{$randomBoolean}},\r\n  \"translateName\": [],\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Document Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{documentID}},\r\n  \"name\": \"{{documentName}}\",\r\n  \"description\": \"MK-TR-ESK-26\",\r\n  \"attachmentStages\": [\r\n    \"STUDENT_REGISTRATION\", \"EXAMINATION\", \"EMPLOYMENT\", \"CERTIFICATE\", \"CONTRACT\", \"DISMISSAL\"\r\n  ],\r\n  \"active\": {{$randomBoolean}},\r\n  \"required\": {{$randomBoolean}},\r\n  \"useCamera\": {{$randomBoolean}},\r\n  \"translateName\": [],\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{documentID}}\",\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]TR<- {{$randomInt}}\",\r\n  \"description\": \"Muharrem Karapazar tarafından düzenlenmiştir.   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀        ... API staj ödevi...\",\r\n  \"attachmentStages\": [\r\n    \"EMPLOYMENT\",\r\n    \"CERTIFICATE\",\r\n    \"CONTRACT\"\r\n  ],\r\n  \"active\": {{$randomBoolean}},\r\n  \"required\": {{$randomBoolean}},\r\n  \"useCamera\": {{$randomBoolean}},\r\n  \"translateName\": [],\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments/{{documentID}}",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							],
+							"path": [
+								"{{documentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Document Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400, Attachment Type with id: 633b338fe919fd14ad5ed187, not found\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments/{{documentID}}",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							],
+							"path": [
+								"{{documentID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Document Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400, Attachment Type with id: 633b338fe919fd14ad5ed187, not found\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{documentID}}\",\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]TR<- {{$randomInt}}\",\r\n  \"description\": \"Muharrem Karapazar tarafından düzenlenmiştir.   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀        ... API staj ödevi...\",\r\n  \"attachmentStages\": [\r\n    \"EMPLOYMENT\",\r\n    \"CERTIFICATE\",\r\n    \"CONTRACT\"\r\n  ],\r\n  \"active\": {{$randomBoolean}},\r\n  \"required\": {{$randomBoolean}},\r\n  \"useCamera\": {{$randomBoolean}},\r\n  \"translateName\": [],\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}attachments",
+							"host": [
+								"{{CAMPUSSURL}}attachments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Position Categories",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"richfield.edu\",\r\n  \"password\": \"Richfield2020!\",\r\n  \"rememberMe\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Position Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"var body=pm.response.json();\r",
+									"var id=body.id;\r",
+									"var name=body.name;\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"positionID\", id);\r",
+									"pm.collectionVariables.set(\"positionName\", name);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]<- {{$randomInt}}\",\r\n  \"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Position Categories Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 400,The Position Category with Name {{positionName}} already exists.\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{positionName}}\",\r\n  \"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Position Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{positionID}}\",\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]TR<- {{$randomInt}}\",\r\n  \"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Position Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category/{{positionID}}",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							],
+							"path": [
+								"{{positionID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Position Categories Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400, PositionCategory not  found\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category/{{positionID}}",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							],
+							"path": [
+								"{{positionID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Position Categories Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400, Can't find Position Category\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{positionID}}\",\r\n  \"name\": \"{{$randomInt}} ->MK[ESK26]TR<- {{$randomInt}}\",\r\n  \"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}position-category",
+							"host": [
+								"{{CAMPUSSURL}}position-category"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bank Accounts",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"richfield.edu\",\r\n  \"password\": \"Richfield2020!\",\r\n  \"rememberMe\": \"true\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Bank Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"var body=pm.response.json();\r",
+									"var id=body.id;\r",
+									"var schoolId=body.schoolId;\r",
+									"\r",
+									"pm.collectionVariables.set(\"bankId\",id);\r",
+									"pm.collectionVariables.set(\"schoolId\",schoolId);\r",
+									"\r",
+									"\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{$randomBankAccountName}}{{$randomInt}}\",\r\n  \"iban\": \"{{$randomBankAccountIban}}\",\r\n  \"integrationCode\": \"{{$randomInt}}\",\r\n  \"currency\": \"USD\",\r\n  \"active\": true,\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bank Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var body=pm.response.json();\r",
+									"var name=body.name;\r",
+									"var iban=body.iban;\r",
+									"var integration=body.integration;\r",
+									"\r",
+									"pm.collectionVariables.set(\"bankName\",name);\r",
+									"pm.collectionVariables.set(\"bankIban\",iban);\r",
+									"pm.collectionVariables.set(\"bankIntegration\",integration);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{bankId}}\",\r\n  \"name\": \"{{$randomBankAccountName}}{{$randomInt}}\",\r\n  \"iban\": \"{{$randomBankAccountIban}}\",\r\n  \"integrationCode\": \"{{$randomInt}}\",\r\n  \"currency\": \"USD\",\r\n  \"active\": true,\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Bank Account Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{bankId}}\",\r\n  \"name\": \"{{bankName}}\",\r\n  \"iban\": \"{{bankIban}}\",\r\n  \"integrationCode\": \"{{bankIntegration}}\",\r\n  \"currency\": \"USD\",\r\n  \"active\": true,\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Bank Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts/{{bankId}}",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							],
+							"path": [
+								"{{bankId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Bank Account Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts/{{bankId}}",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							],
+							"path": [
+								"{{bankId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Bank Account Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{bankId}}\",\r\n  \"name\": \"{{$randomBankAccountName}}{{$randomInt}}\",\r\n  \"iban\": \"{{$randomBankAccountIban}}\",\r\n  \"integrationCode\": \"{{$randomInt}}\",\r\n  \"currency\": \"USD\",\r\n  \"active\": true,\r\n  \"schoolId\": \"5fe07e4fb064ca29931236a5\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bank Accounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"schoolId\": \"{{schoolId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}bank-accounts/search",
+							"host": [
+								"{{CAMPUSSURL}}bank-accounts"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Discounts",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"richfield.edu\", \"password\": \"Richfield2020!\", \"rememberMe\": true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Discounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"var body=pm.response.json();\r",
+									"var description=body.description;\r",
+									"var code=body.code;\r",
+									"var priority=body.priority;\r",
+									"var id=body.id;\r",
+									"\r",
+									"console.log(description);\r",
+									"console.log(code);\r",
+									"console.log(priority);\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"Rdescription\", description);\r",
+									"pm.collectionVariables.set(\"Rcode\", code);\r",
+									"pm.collectionVariables.set(\"Rpriority\", priority);\r",
+									"pm.collectionVariables.set(\"Rid\",id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": null,\r\n \"description\":\"{{$randomCountry}}\", \r\n \"code\": \"{{$randomCountryCode}} {{$randomInt}}\", \r\n \"active\": true, \r\n \"translateDescription\": [],\r\n  \"priority\": \" {{$randomInt}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Discounts Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": null,\r\n \"description\":\"{{Rdescription}}\", \r\n \"code\": \"{{Rcode}}\", \r\n \"active\": true, \r\n \"translateDescription\": [],\r\n  \"priority\":\"{{Rpriority}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Discounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": \"{{Rid}}\",\r\n \"description\":\"{{$randomCountry}}\", \r\n \"code\": \"{{Rcode}}\", \r\n \"active\": true, \r\n \"translateDescription\": [],\r\n  \"priority\": \" {{Rpriority}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Discounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Discounts Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Discounts Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": \"{{Rid}}\",\r\n \"description\":\"{{Rdescription}}\", \r\n \"code\": \"{{Rcode}}\", \r\n \"active\": true, \r\n \"translateDescription\": [],\r\n  \"priority\": \" {{Rpriority}}\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}discounts",
+							"host": [
+								"{{CAMPUSSURL}}discounts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subject Categories",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"richfield.edu\", \"password\": \"Richfield2020!\", \"rememberMe\": true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Subject Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var body=pm.response.json();\r",
+									"var name=body.name;\r",
+									"var code=body.code;\r",
+									"var id=body.id;\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"Rname\",name);\r",
+									"pm.collectionVariables.set(\"Rcode\",code);\r",
+									"pm.collectionVariables.set(\"Rid\",id);\r",
+									"\r",
+									"console.log(name);\r",
+									"console.log(code);\r",
+									"console.log(id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": null,\r\n\"name\":\"{{$randomUserName}}\", \r\n\"code\":\"{{$randomCountryCode}}\", \r\n\"active\":true,\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Subject Categories Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":{{Rid}},\r\n\"name\":\"{{Rname}}\", \r\n\"code\":\"{{Rcode}}\", \r\n\"active\":true,\r\n\"translateName\":[]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Subject Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":\"{{Rid}}\",\r\n\"name\":\"{{$randomUserName}}\", \r\n\"code\":\"{{$randomCountryCode}}\", \r\n\"active\":true,\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subject Categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Subject Categories Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Subject Categories Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":{{Rid}},\r\n\"name\":\"{{Rname}}\", \r\n\"code\":\"{{rCODE}}\", \r\n\"active\":true,\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}subject-categories",
+							"host": [
+								"{{CAMPUSSURL}}subject-categories"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Grade Levels",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"richfield.edu\", \"password\": \"Richfield2020!\", \"rememberMe\": true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Grade Levels",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"var body=pm.response.json();\r",
+									"\r",
+									"var name=body.name;\r",
+									"var shortName=body.shortName;\r",
+									"var order=body.order;\r",
+									"var id=body.id;\r",
+									"\r",
+									"pm.collectionVariables.set(\"Rname\",name);\r",
+									"pm.collectionVariables.set(\"RsortName\",shortName);\r",
+									"pm.collectionVariables.set(\"Rorder\",order);\r",
+									"pm.collectionVariables.set(\"Rid\",id);\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": null,\r\n\"name\": \"{{$randomUserName}}\",\r\n\"shortName\": \"{{$randomLastName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{$randomInt}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Grade Levels Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\": null,\r\n\"name\": \"{{Rname}}\",\r\n\"shortName\": \"{{RsortName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{Rorder}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Grade Levels",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":\"{{Rid}}\",\r\n\"name\":\"{{$randomUserName}}\",\r\n\"shortName\": \"{{RsortName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{Rorder}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Grade Levels",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":\"{{Rid}}\",\r\n\"name\":\"{{$randomUserName}}\",\r\n\"shortName\": \"{{RsortName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{Rorder}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Grade Levels Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":\"{{Rid}}\",\r\n\"name\":\"{{$randomUserName}}\",\r\n\"shortName\": \"{{RsortName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{Rorder}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels/{{Rid}}",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							],
+							"path": [
+								"{{Rid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Grade Levels Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":{{Rid}},\r\n\"name\": \"{{Rname}}\",\r\n\"shortName\": \"{{RsortName}}\",\r\n \"nextGradeLevel\": null, \r\n\"order\":\"{{Rorder}}\",\r\n\"translateName\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{CAMPUSSURL}}grade-levels",
+							"host": [
+								"{{CAMPUSSURL}}grade-levels"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "School Locations",
+			"item": [
+				{
+					"name": "Login Campus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"richfield.edu\",\r\n  \"password\": \"Richfield2020!\",\r\n  \"rememberMe\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/auth/login",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Add",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var body=pm.response.json();\r",
+									"var id=body.id;\r",
+									"var name=body.name;\r",
+									"\r",
+									"console.log(id);\r",
+									"\r",
+									"pm.collectionVariables.set(\"createId\",id);\r",
+									"pm.collectionVariables.set(\"createName\",name);\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"shortName\": \"dene123\",\r\n  \"active\": true,\r\n  \"capacity\": \"30\",\r\n  \"type\": \"CLASS\",\r\n  \"school\": {\r\n    \"id\": \"5fe07e4fb064ca29931236a5\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Add Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": null,\r\n  \"name\": \"{{createName}}\",\r\n  \"shortName\": {{$randomLastName}},\r\n  \"active\": true,\r\n  \"capacity\": \"30\",\r\n  \"type\": \"CLASS\",\r\n  \"school\": {\r\n    \"id\": \"5fe07e4fb064ca29931236a5\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Edit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{createId}}\",\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"shortName\": \"{{$randomLastName}}\",\r\n  \"active\": true,\r\n  \"capacity\": \"20\",\r\n  \"type\": \"CLASS\",\r\n  \"school\": {\r\n    \"id\": \"5fe07e4fb064ca29931236a5\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location/{{createId}}",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location",
+								"{{createId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Delete Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location/{{createId}}",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location",
+								"{{createId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "School Locations Edit Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{createId}}\",\r\n  \"name\": \"{{$randomFirstName}}\",\r\n  \"shortName\": \"{{$randomLastName}}\",\r\n  \"active\": true,\r\n  \"capacity\": \"20\",\r\n  \"type\": \"CLASS\",\r\n  \"school\": {\r\n    \"id\": \"5fe07e4fb064ca29931236a5\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demo.mersys.io/school-service/api/location",
+							"protocol": "https",
+							"host": [
+								"demo",
+								"mersys",
+								"io"
+							],
+							"path": [
+								"school-service",
+								"api",
+								"location"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "positionName",
+			"value": ""
+		},
+		{
+			"key": "positionID",
+			"value": ""
+		},
+		{
+			"key": "shortName",
+			"value": ""
+		},
+		{
+			"key": "editName",
+			"value": ""
+		},
+		{
+			"key": "editShortName",
+			"value": ""
+		},
+		{
+			"key": "documentID",
+			"value": ""
+		},
+		{
+			"key": "documentName",
+			"value": ""
+		},
+		{
+			"key": "bankId",
+			"value": ""
+		},
+		{
+			"key": "schoolId",
+			"value": ""
+		},
+		{
+			"key": "bankName",
+			"value": ""
+		},
+		{
+			"key": "bankIban",
+			"value": ""
+		},
+		{
+			"key": "bankIntegration",
+			"value": ""
+		},
+		{
+			"key": "Rdescription",
+			"value": ""
+		},
+		{
+			"key": "Rcode",
+			"value": ""
+		},
+		{
+			"key": "Rpriority",
+			"value": ""
+		},
+		{
+			"key": "Rid",
+			"value": ""
+		},
+		{
+			"key": "Rname",
+			"value": ""
+		},
+		{
+			"key": "RsortName",
+			"value": ""
+		},
+		{
+			"key": "Rorder",
+			"value": ""
+		},
+		{
+			"key": "createId",
+			"value": ""
+		},
+		{
+			"key": "createName",
+			"value": ""
+		}
+	]
+}
